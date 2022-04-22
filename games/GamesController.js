@@ -84,16 +84,20 @@ router.delete('/game/:gameId', async (req, res) => {
 router.put('/game/:gameId', async (req, res) => {
     let {gameId} = req.params;
     let {title, year, price} = req.body;
-    console.log(title, year, price);
+
+    // Remove Undefined fields
+    let updateFields = {title: title, year: year, price: price};
+    Object.keys(updateFields).forEach((key) => {
+        if (updateFields[key] == undefined){
+           delete updateFields[key];
+        }
+    });
+
     if (gameId != undefined && !isNaN(gameId)) {
         let game = await Game.findByPk(parseInt(gameId));
         if (game != undefined){
             Game.update(
-                {
-                    title: title,
-                    year: year,
-                    price: price,
-                }
+                updateFields
                 ,{where: {id: gameId}}
             ).then((gameUpdated) => {
                 console.log('AAAAA');
