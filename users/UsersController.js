@@ -26,7 +26,7 @@ router.post("/auth",  (req, res) => {
                     res.json({token: token});
                 }else{
                     res.statusCode = 401
-                    res.json({err: "password invalid"});
+                    res.json({err: "invalid password"});
                 }
             }else{
 
@@ -61,10 +61,10 @@ router.post('/user', middlewareJWT, (req, res) => {
     }).catch((err) => {
         if (err.stack.toLowerCase().includes("sequelizevalidationerror")) {
             res.statusCode = 400;
-            res.json({err: err.message});
         }else{
-            res.sendStatus(500);
-        }
+            res.statusCode = 500;
+        };
+        res.json({err: err.message});
     });
 });
 
@@ -75,7 +75,7 @@ router.get('/users', middlewareJWT, (req, res) => {
             res.json(users);
         }else{
             res.statusCode = 404;
-            res.json({});
+            res.json({err: 'user not found'});
         }
     }).catch((err)=>{
         res.statusCode = 500;

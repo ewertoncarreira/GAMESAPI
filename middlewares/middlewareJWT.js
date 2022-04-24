@@ -4,6 +4,12 @@ const JWTSecret = "Qf2p3o@wrtn26Qf2p3o@wrtn26Qf2p3o@wrtn26Qf2p3o@wrtn26Qf2p3o@wr
 middlewareJWT = (req, res, next) => {
     const authToken = req.headers["authorization"];
 
+    if (authToken === undefined){
+        res.statusCode = 400;
+        res.json({err: "Authorization is required"});
+        return;
+    };
+
     let fullToken = authToken.split(" ");
     let token =  "";
 
@@ -14,9 +20,10 @@ middlewareJWT = (req, res, next) => {
         token = fullToken[1];
     };
 
-    if (token=== undefined){
+    if (token === undefined){
         res.statusCode = 400;
         res.json({err: "token is required"});
+        return;
     }
 
     jwt.verify(token, JWTSecret, (err, data) => {

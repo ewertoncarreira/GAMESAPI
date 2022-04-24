@@ -29,10 +29,12 @@ router.get('/game/:gameId', middlewareJWT, (req, res) => {
             }
         }).catch((err) => {
             console.log(err.stack);
-            res.sendStatus(500);
+            res.statusCode = 500;
+            res.json({err : err.message});
         });
     }else{
-        res.sendStatus(400);
+        res.statusCode = 400;
+        res.json({err : "parameter id is required"});
     }
 });
 
@@ -50,7 +52,8 @@ router.post('/game', middlewareJWT, (req, res) => {
             res.statusCode = 400;
             res.json({err: err.message});
         }else{
-            res.sendStatus(500);
+            res.statusCode = 500;
+            res.json({err : err.message});
         }
     });
 });
@@ -67,18 +70,20 @@ router.delete('/game/:gameId', middlewareJWT, async (req, res) => {
                     res.statusCode = 200;
                     res.json({ deleteCount: count}) ;
                 }).catch((err) => {
-                    console.log(err.stack);
-                    res.sendStatus(500);     
+                    res.statusCode = 500;
+                    res.json({err: err.message});
                 });
             }else{
-                res.sendStatus(404);
+                res.statusCode = 404;
+                res.json({err: "game not found"});
             }
         } catch (err) {
-            console.log(err.stack);
-            res.sendStatus(500);
+            res.statusCode = 500;
+            res.json({err: err.message});
         }
     }else{
-        res.sendStatus(400);
+        res.statusCode = 400;
+        res.json({err : "parameter id is required"});
     }
 });
 
@@ -109,14 +114,17 @@ router.put('/game/:gameId', middlewareJWT, async (req, res) => {
                     res.statusCode = 400;
                     res.json({err: err.message});
                 }else{
-                    res.sendStatus(500);
+                    res.statusCode = 500;
+                    res.json({err: err.message});
                 }
             });
         }else{
-            res.sendStatus(404);
+            res.statusCode = 404;
+            res.json({err: "game not found"});
         }
     }else{
-        res.sendStatus(400);
+        res.statusCode = 400;
+        res.json({err : "parameter id is required"});
     }
 });
 

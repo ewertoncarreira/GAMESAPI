@@ -1,3 +1,30 @@
+let axiosConfig = {
+    headers: {
+        Authorization: ''
+    }
+};
+
+function setToken() {
+    axiosConfig.headers.Authorization = localStorage.getItem('token');;    
+}
+setToken();
+
+function loginUser(){
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+
+    let body = {email, password};
+    axios.post("http://localhost:3000/auth",body).then((response) => {
+        localStorage.setItem("token",response.data.token);
+        setToken();
+        alert("Auth successful");
+        loadGames();
+    }).catch((err) => {
+        alert(err.message);
+    })
+
+}
+
 function createGame(){
     let titleInput = document.getElementById("title");
     let yearInput = document.getElementById("year");
@@ -9,7 +36,7 @@ function createGame(){
         price: priceInput.value
     };
 
-    axios.post("http://localhost:3000/game",game).then((res)=>{
+    axios.post("http://localhost:3000/game",game,axiosConfig).then((res)=>{
         if (res.status === 200){
             alert("Game created successfully!");
             loadGames();
@@ -23,7 +50,7 @@ function createGame(){
 
 function deleteGame(listItem){
     let id = listItem.getAttribute("data-id");
-    axios.delete("http://localhost:3000/game/"+id).then((res)=>{
+    axios.delete("http://localhost:3000/game/"+id,axiosConfig).then((res)=>{
         if (res.status=== 200) {
             alert("Game deleted successfully!");
             loadGames();
@@ -47,7 +74,7 @@ function updateGame(){
         price: price
     };
 
-    axios.put("http://localhost:3000/game/"+id,game).then((res)=>{
+    axios.put("http://localhost:3000/game/"+id,game,axiosConfig).then((res)=>{
         if (res.status=== 200) {
             alert("Game updated successfully!");
             loadGames();
@@ -77,7 +104,7 @@ function showGame(listItem){
 }
 
 function loadGames(){
-    axios.get("http://localhost:3000/games").then((response) => {
+    axios.get("http://localhost:3000/games",axiosConfig).then((response) => {
         let games  = response.data;
         let list = document.getElementById("games");
 
