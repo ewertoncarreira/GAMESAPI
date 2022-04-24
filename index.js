@@ -10,4 +10,7 @@ app.use(cors());
 const gamesController = require("./games/GamesController"); // USE GAME ROUTER
 app.use("/",gamesController);
 
+const usersController = require("./users/UsersController"); // USE USER ROUTER
+app.use("/",usersController);
+
 app.listen(3000, () => console.log(`Servidor rodadndo na porta: ${3000}!`))

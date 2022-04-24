@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Game = require("./Game");
+const {middlewareJWT} = require("../middlewares/middlewareJWT");
 
-router.get('/games', (req, res) => {
+router.get('/games', middlewareJWT, (req, res) => {
     Game.findAll({
         order: [
             ["id","asc"]
@@ -16,7 +17,7 @@ router.get('/games', (req, res) => {
     });
 });
 
-router.get('/game/:gameId', (req, res) => {
+router.get('/game/:gameId', middlewareJWT, (req, res) => {
     let {gameId} = req.params;
     if (gameId != undefined && !isNaN(gameId)) {
         Game.findByPk(parseInt(gameId)).then((game) => {
@@ -35,7 +36,7 @@ router.get('/game/:gameId', (req, res) => {
     }
 });
 
-router.post('/game', (req, res) => {
+router.post('/game', middlewareJWT, (req, res) => {
     let { title, year, price } = req.body;
     Game.create({
         title,
@@ -54,7 +55,7 @@ router.post('/game', (req, res) => {
     });
 });
 
-router.delete('/game/:gameId', async (req, res) => {
+router.delete('/game/:gameId', middlewareJWT, async (req, res) => {
     let {gameId} = req.params;
     if (gameId != undefined && !isNaN(gameId)) {
         try {
@@ -81,7 +82,7 @@ router.delete('/game/:gameId', async (req, res) => {
     }
 });
 
-router.put('/game/:gameId', async (req, res) => {
+router.put('/game/:gameId', middlewareJWT, async (req, res) => {
     let {gameId} = req.params;
     let {title, year, price} = req.body;
 

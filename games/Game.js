@@ -24,7 +24,7 @@ const Game = connection.define('games',{
     },
 });
 
-// ATUALIZAR/SINCRONIZAR BASE DE DADOS
+// FORCE DATABASE TABLE SYNC
 // Game.sync({force:true});
 
 module.exports = Game;
