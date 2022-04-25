@@ -6,7 +6,7 @@ middlewareJWT = (req, res, next) => {
 
     if (authToken === undefined){
         res.statusCode = 400;
-        res.json({err: "Authorization is required"});
+        res.json({err: "authorization token is required"});
         return;
     };
 
@@ -22,7 +22,7 @@ middlewareJWT = (req, res, next) => {
 
     if (token === undefined){
         res.statusCode = 400;
-        res.json({err: "token is required"});
+        res.json({err: "authorization token is required"});
         return;
     }
 

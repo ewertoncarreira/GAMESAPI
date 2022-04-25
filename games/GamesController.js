@@ -22,7 +22,8 @@ router.get('/game/:gameId', middlewareJWT, (req, res) => {
     if (gameId != undefined && !isNaN(gameId)) {
         Game.findByPk(parseInt(gameId)).then((game) => {
             if (game === null || game == undefined) {
-                res.sendStatus(404);
+                res.statusCode = 404;
+                res.json({err: "game not found"});
             }else{
                 res.statusCode = 200;
                 res.json(game);
