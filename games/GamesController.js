@@ -3,12 +3,46 @@ const router = express.Router();
 const Game = require("./Game");
 const {middlewareJWT} = require("../middlewares/middlewareJWT");
 
+function generateGameHATEOAS(gameId){
+    let HATEOAS = [
+        {
+            link: "/games",
+            method: "GET",
+            rel: "gel_all_games"
+        },
+        {
+            link: "/game/"+gameId,
+            method: "GET",
+            rel: "get_game"
+        },
+        {
+            link: "/game/"+gameId,
+            method: "DELETE",
+            rel: "delete_game"
+        },
+        {
+            link: "/game/"+gameId,
+            method: "PUT",
+            rel: "edit_game"
+        }
+    ];
+    return HATEOAS
+}
+
 router.get('/games', middlewareJWT, (req, res) => {
     Game.findAll({
         order: [
             ["id","asc"]
         ]}
     ).then((games) => {
+
+        // INPUTS DYNAMIC HATEOAS
+        let returnGames = [];
+        games.forEach((game,index) =>{
+            game.dataValues._links = generateGameHATEOAS(game.id);
+            games[index] = (game);
+        });
+
         res.statusCode = 200;
         res.json(games);
     }).catch((err) => {
@@ -25,6 +59,8 @@ router.get('/game/:gameId', middlewareJWT, (req, res) => {
                 res.statusCode = 404;
                 res.json({err: "game not found"});
             }else{
+                // ADDING HATEOAS LINKS
+                game.dataValues._links = generateGameHATEOAS(gameId);
                 res.statusCode = 200;
                 res.json(game);
             }
@@ -47,6 +83,8 @@ router.post('/game', middlewareJWT, (req, res) => {
         price
     }).then((game) => {
         res.statusCode = 200;
+        // ADDING HATEOAS LINKS
+        game.dataValues._links = generateGameHATEOAS(game.id);
         res.json(game);
     }).catch((err) => {
         if (err.stack.toLowerCase().includes("sequelizevalidationerror")) {
@@ -69,7 +107,7 @@ router.delete('/game/:gameId', middlewareJWT, async (req, res) => {
                     {where: {id: gameId}}
                 ).then((count) => {
                     res.statusCode = 200;
-                    res.json({ deleteCount: count}) ;
+                    res.json({ deleteCount: count, _links: generateGameHATEOAS(0)});
                 }).catch((err) => {
                     res.statusCode = 500;
                     res.json({err: err.message});
@@ -107,9 +145,8 @@ router.put('/game/:gameId', middlewareJWT, async (req, res) => {
                 updateFields
                 ,{where: {id: gameId}}
             ).then((gameUpdated) => {
-                console.log('AAAAA');
                 res.statusCode = 200;
-                res.json(gameUpdated) ;
+                res.json({ updateCount: gameUpdated[0], _links: generateGameHATEOAS(game.id)}) ;
             }).catch((err) => {
                 if (err.stack.toLowerCase().includes("sequelizevalidationerror")) {
                     res.statusCode = 400;

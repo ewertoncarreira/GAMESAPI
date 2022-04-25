@@ -277,16 +277,11 @@ Bearer token Authorization needed
 ```
 #### Reponses:
 ##### OK | 200
-When request is sucess, returns a updated game
+When request is sucess, returns rows afecteds
 **Example:**
 ```
 {
-    "id": 18,
-    "title": "Tibia",
-    "year": 199,
-    "price": 1233,
-    "updatedAt": "2022-04-25T01:14:35.167Z",
-    "createdAt": "2022-04-25T01:14:35.167Z"
+   "updateCount": 1
 }
 ```
 ##### ERROR | 400
