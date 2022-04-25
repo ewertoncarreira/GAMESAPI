@@ -14,7 +14,7 @@ const usersController = require("./users/UsersController"); // USE USER ROUTER
 app.use("/",usersController);
 
 const swaggerUi = require('swagger-ui-express')
-const swaggerFile = require("./.swagger_output.json");
+const swaggerFile = require("./swagger/swagger_output.json");
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 app.listen(3000, () => console.log(`Servidor rodadndo na porta: ${3000}!`));
