@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const JWTSecret = "Qf2p3o@wrtn26Qf2p3o@wrtn26Qf2p3o@wrtn26Qf2p3o@wrtn26Qf2p3o@wrtn26Qf2p3o@wrtn26";
+const JWTSecret = "123456789";
 
 middlewareJWT = (req, res, next) => {
     const authToken = req.headers["authorization"];
